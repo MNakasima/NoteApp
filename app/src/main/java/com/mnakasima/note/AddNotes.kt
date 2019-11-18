@@ -2,6 +2,7 @@ package com.mnakasima.note
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 
 class AddNotes : AppCompatActivity() {
 
@@ -10,4 +11,7 @@ class AddNotes : AppCompatActivity() {
         setContentView(R.layout.activity_add_notes)
     }
 
+    fun buAdd(view: View){
+        finish()
+    }
 }

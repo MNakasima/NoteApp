@@ -41,6 +41,7 @@
         android:layout_marginRight="60dp"
         android:layout_marginBottom="160dp"
         android:background="@drawable/bublue_color"
+        android:onClick="buAdd"
         android:text="Add Note"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
