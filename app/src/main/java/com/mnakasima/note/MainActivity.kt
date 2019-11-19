@@ -26,6 +26,11 @@ class MainActivity : AppCompatActivity() {
         loadQuery("%")
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadQuery("%")
+    }
+
     fun loadQuery(title:String){
         var dbManager = DbManager(this)
         val projection = arrayOf("ID", "Title", "Description")
@@ -44,15 +49,9 @@ class MainActivity : AppCompatActivity() {
             }while(cursor.moveToNext())
         }
 
-        var myNotesAdapter = NoteAdapter(listNotes)
+        var myNotesAdapter = NoteAdapter(this, listNotes)
         lvNotes.adapter = myNotesAdapter
 
-    }
-
-    fun loadNote(){
-        listNotes.add(Note(1,"Study","Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"))
-        listNotes.add(Note(2,"Study again","Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"))
-        listNotes.add(Note(3,"Pause and then Study","Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book"))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -94,9 +93,11 @@ class MainActivity : AppCompatActivity() {
     inner class NoteAdapter:BaseAdapter{
 
         var listNoteAdapter = arrayListOf<Note>()
+        var context:Context?=null
 
-        constructor(listNoteAdapter:ArrayList<Note>):super(){
+        constructor(context: Context, listNoteAdapter:ArrayList<Note>):super(){
             this.listNoteAdapter = listNoteAdapter
+            this.context = context
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -106,6 +107,13 @@ class MainActivity : AppCompatActivity() {
 
             myView.tvTitle.text = myNote.title
             myView.tvDescription.text = myNote.description
+
+            myView.ivDel.setOnClickListener ( View.OnClickListener{
+                var dbManager = DbManager(this.context!!)
+                val selectionsArgs = arrayOf(myNote.id.toString())
+                dbManager.Delete("ID=?", selectionsArgs)
+                loadQuery("%")
+            })
 
             return myView
         }
