@@ -115,6 +115,12 @@ class MainActivity : AppCompatActivity() {
                 loadQuery("%")
             })
 
+            myView.ivEdit.setOnClickListener(View.OnClickListener {
+
+                GoToUpdate(myNote)
+
+            })
+
             return myView
         }
 
@@ -129,9 +135,14 @@ class MainActivity : AppCompatActivity() {
         override fun getCount(): Int {
             return listNoteAdapter.size
         }
+    }
 
-
-
+    fun GoToUpdate(note:Note){
+        var intent = Intent(this, AddNotes::class.java)
+        intent.putExtra("ID", note.id)
+        intent.putExtra("Title", note.title)
+        intent.putExtra("Description", note.description)
+        startActivity(intent)
     }
 
 }
