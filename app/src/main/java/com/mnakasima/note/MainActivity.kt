@@ -23,9 +23,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        loadNote()
+        loadQuery("%")
+    }
 
-       var myNotesAdapter = NoteAdapter(listNotes)
+    fun loadQuery(title:String){
+        var dbManager = DbManager(this)
+        val projection = arrayOf("ID", "Title", "Description")
+        val selectionArgs = arrayOf(title)
+        val cursor = dbManager.Query(projection,"Title like ? ", selectionArgs,"Title")
+
+        if(cursor.moveToFirst()){
+
+            do{
+                val ID = cursor.getInt(cursor.getColumnIndex("ID"))
+                val title = cursor.getString(cursor.getColumnIndex("Title"))
+                val description = cursor.getString(cursor.getColumnIndex("Description"))
+
+                listNotes.add(Note(ID, title, description))
+
+            }while(cursor.moveToNext())
+        }
+
+        var myNotesAdapter = NoteAdapter(listNotes)
         lvNotes.adapter = myNotesAdapter
 
     }
@@ -47,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         sv.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Toast.makeText(applicationContext,query,Toast.LENGTH_LONG).show()
+                loadQuery("%"+query+"%")
                 return false
             }
 
