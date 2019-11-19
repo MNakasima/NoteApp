@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         val projection = arrayOf("ID", "Title", "Description")
         val selectionArgs = arrayOf(title)
         val cursor = dbManager.Query(projection,"Title like ? ", selectionArgs,"Title")
+        listNotes.clear()
 
         if(cursor.moveToFirst()){
 
